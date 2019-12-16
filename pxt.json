@@ -1,0 +1,17 @@
+{
+    "name": "pxt-NKP-bit",
+    "version": "0.0.1",
+    "description": "",
+    "license": "MIT",
+    "dependencies": {
+        "core": "*"
+    },
+    "files": [
+        "README.md",
+        "NKP-bit.ts"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "public": true
+}
