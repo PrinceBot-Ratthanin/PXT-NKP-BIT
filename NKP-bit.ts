@@ -44,7 +44,7 @@ namespace NKP_BIT {
     //% Speed.min=0 Speed.max=100
     //% weight=90
     export function MotorON(Channel:motorSEL, Direction:motorDIR, Speed:number): void {
-        let motorspeed = pins.map(Speed, 0, 100, 1023, 0)  
+        let motorspeed = pins.map(Speed, 0, 100, 0, 1023)  
         
         if (Channel == motorSEL.M1 && Direction == motorDIR.Forward) {
            pins.analogWritePin(AnalogPin.P9, motorspeed)
