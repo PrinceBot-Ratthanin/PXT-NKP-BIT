@@ -34,7 +34,7 @@ enum Turn {
 /**
  * Custom blocks
  */
-//% weight=10 color=#ff9900 weight=10 icon="\uf11e"
+//% weight=10 color=#ff9900 weight=10 icon="\uf11b"
 namespace NKP_BIT {
 
     /**MotorON          Control motor channel direction and speed.   
