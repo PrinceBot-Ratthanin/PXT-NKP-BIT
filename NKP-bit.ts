@@ -149,12 +149,6 @@ namespace NKP_BIT {
         
     }
 	
-
-/**
-     * read analog sensor value from P0 -P4 and P10
-     * @param selectpin         select analog pin to read
-     * @return number           returns analog value from 0 to 1023
-     */
     //% blockId=NKP_AnalogRead
     //% block="AnalogRead Pin %APort"
     //% weight=80
