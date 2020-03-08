@@ -41,7 +41,7 @@ enum Servo {
 	//% block="P16"
 	Servo16
     }
-export enum analogPort {
+export enum APort {
 	//% block="P0"
 	P0,
 	//% block="P1"
@@ -158,8 +158,12 @@ namespace NKP_BIT {
     //% blockId=MySensor_analogRead
     //% block="analog read |%selectpin|"
     //% weight=80
-    export function analogRead(selectpin: analogPort): number {
-	
+    export function analogRead(selectpinA:APort): number {
+	    if(selectpinA == APort.P0){
+	    	return pins.analogReadPin(AnalogPin.P0);
+	    }
+	    
+	/*
         switch (selectpin) {
             case analogPort.P0:
                 return pins.analogReadPin(AnalogPin.P0);
@@ -175,7 +179,7 @@ namespace NKP_BIT {
                 return pins.analogReadPin(AnalogPin.P10);
             default:
                 return 0;
-        }
+        }*/
     }
 
     /**
