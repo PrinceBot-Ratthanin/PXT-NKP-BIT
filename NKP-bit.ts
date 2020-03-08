@@ -156,7 +156,7 @@ namespace NKP_BIT {
      * @return number           returns analog value from 0 to 1023
      */
     //% blockId=MySensor_analogRead
-    //% block="analog read |%selectpin|"
+    //% block="AnalogRead Pin |%APort|"
     //% weight=80
     export function analogRead(selectpinA:APort): number {
 	    if(selectpinA == APort.P0){
