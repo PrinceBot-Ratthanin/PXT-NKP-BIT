@@ -41,7 +41,7 @@ enum Servo {
 	//% block="P16"
 	Servo16
     }
-export enum APort {
+enum APort {
 	//% block="P0"
 	P0,
 	//% block="P1"
@@ -55,7 +55,7 @@ export enum APort {
 	//% block="P10"
 	P10
     }
-export enum digitalPort {
+enum digitalPort {
         //% block="P0"
 	P0,
 	//% block="P1"
