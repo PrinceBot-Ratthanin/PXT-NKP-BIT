@@ -41,30 +41,9 @@ enum Servo {
 	//% block="P16"
 	Servo16
     }
-export enum analogPort {
-        P0,
-        P1,
-        P2,
-        P3,
-        P4,
-        P10
-    }
 
-    export enum digitalPort {
-        P0,
-        P1,
-        P2,
-        P3,
-        P4,
-        P10,
-        P6,
-        P7,
-        P8,
-        P9,
-        P12,
-        P5,
-        P11
-    }
+
+   
 
 /**
  * Custom blocks
@@ -144,6 +123,14 @@ namespace NKP_BIT {
     //% block="analog read |%selectpin|"
     //% weight=80
     export function analogRead(selectpin: analogPort): number {
+	export enum analogPort {
+        P0,
+        P1,
+        P2,
+        P3,
+        P4,
+        P10
+    }
         switch (selectpin) {
             case analogPort.P0:
                 return pins.analogReadPin(AnalogPin.P0);
@@ -171,6 +158,21 @@ namespace NKP_BIT {
     //% block="digital read |%selectpins|"
     //% weight=79
     export function digitalRead(selectpins:digitalPort): number {
+	 export enum digitalPort {
+        P0,
+        P1,
+        P2,
+        P3,
+        P4,
+        P10,
+        P6,
+        P7,
+        P8,
+        P9,
+        P12,
+        P5,
+        P11
+    }
         switch (selectpins) {
             case digitalPort.P0:
                 return pins.digitalReadPin(DigitalPin.P0);
