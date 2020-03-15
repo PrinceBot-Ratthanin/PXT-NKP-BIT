@@ -48,6 +48,24 @@ enum Servo {
  */
 //% weight=10 color=#ff9900 weight=10 icon="\uf11b"
 namespace NKP_BIT {
+	/**
+     * TODO: AnalogRead
+     * @param e describe value here, eg: 0
+     */
+    //% block
+    export function analog(e: AnalogPin): number {
+        return pins.analogReadPin(e);
+    }
+	
+	/**
+     * TODO: digitalRead
+     * @param e describe value here, eg: 0
+     */
+    //% block
+    export function DigitalRead(e: AnalogPin): number {
+        return pins.digitalReadPin(e);
+    }
+	
 
     /**MotorON          Control motor channel direction and speed.   
     * @param Speed  	  Percent of motor speed, eg: 50
