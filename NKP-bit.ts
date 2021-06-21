@@ -10,6 +10,7 @@ enum motorSEL {
     M12
 }
 
+
 enum motorDIR {
     //% block="Forward"
     Forward,
@@ -21,6 +22,12 @@ enum motorTurn {
     Left,
     //% block="Right"
     Right
+}
+enum lineColor {
+    //% block="Black"
+    Black,
+    //% block="White"
+    White
 }
 
 enum StopMode {
@@ -54,6 +61,15 @@ enum Servo {
  */
 //% weight=10 color=#ff9900 weight=10 icon="\uf11b"
 namespace NKP_BIT {
+    let Color_Line = 0;  //0 = black, 1 = white 
+    let minValue = [0, 0, 0, 0, 0, 0, 0, 0];
+    let maxValue = [0, 0, 0, 0, 0, 0, 0, 0];
+    let Num_Sensor = 0;
+    let _lastPosition = 0;
+    let returnValue = 0;
+    let integral = 0;
+    let derivative = 0;
+    let previous_error = 0;
     export enum analogPort {
         P0,
         P1,
@@ -63,23 +79,23 @@ namespace NKP_BIT {
         P10
     }
     export enum digitalPort {
-    P0,
-    P1,
-    P2,
-    P3,
-    P4,
-    P5,
-    P6,
-    P7,
-    P8,
-    P9,
-    P10,
-    P11,
-    P12,
-    P13,
-    P14,
-    P15,
-    P16
+        P0,
+        P1,
+        P2,
+        P3,
+        P4,
+        P5,
+        P6,
+        P7,
+        P8,
+        P9,
+        P10,
+        P11,
+        P12,
+        P13,
+        P14,
+        P15,
+        P16
     }
     /**
      * read analog sensor value from P0 -P4 and P10
@@ -88,7 +104,7 @@ namespace NKP_BIT {
      */
     //% blockId=MySensor_analogRead
     //% block="analog read |%selectpin|"
-    //% weight=80
+    //% weight=100
     export function analogRead(selectpin: analogPort): number {
         switch (selectpin) {
             case analogPort.P0:
@@ -115,7 +131,7 @@ namespace NKP_BIT {
      */
     //% blockId=MySensor_digitalRead
     //% block="digital read |%selectpins|"
-    //% weight=79
+    //% weight=99
     export function digitalRead(selectpins:digitalPort): number {
         switch (selectpins) {
             case digitalPort.P0:
@@ -148,6 +164,39 @@ namespace NKP_BIT {
                 return 0;
         }
     }
+    /**
+     * Write a HIGH or a LOW value to a digital pin.
+     * @param selectpins         select digital pin to read
+     * @param Status           status HIGH to 3.3-5v and LOW 0v
+     */
+    //% blockId=digitalWriteStatus
+    //% block="digital write %selectpins | status %Pinstatus "
+    //% weight=98
+    export function digitalWrite(selectpins:digitalPort ,Status:number): void {
+        switch (selectpins) {
+            case digitalPort.P0:
+                pins.digitalWritePin(DigitalPin.P0,Status);
+            case digitalPort.P1:
+                pins.digitalWritePin(DigitalPin.P1,Status);
+            case digitalPort.P2:
+                pins.digitalWritePin(DigitalPin.P2,Status);
+            case digitalPort.P3:
+                pins.digitalWritePin(DigitalPin.P3,Status);
+            case digitalPort.P4:
+                pins.digitalWritePin(DigitalPin.P4,Status);
+            case digitalPort.P10:
+                pins.digitalWritePin(DigitalPin.P10,Status);
+            case digitalPort.P13:
+                pins.digitalWritePin(DigitalPin.P13,Status);
+            case digitalPort.P14:
+                pins.digitalWritePin(DigitalPin.P14,Status);
+            case digitalPort.P15:
+                pins.digitalWritePin(DigitalPin.P15,Status);
+            case digitalPort.P16:
+                pins.digitalWritePin(DigitalPin.P16,Status);
+        }
+        // body...
+    }
     
 
     /**MotorON          Control motor channel direction and speed.   
@@ -155,7 +204,7 @@ namespace NKP_BIT {
     */
     //% blockId="Motor_MotorRun" block="motor %motorSEL | direction %motorDIR | speed %Speed"
     //% Speed.min=0 Speed.max=100
-    //% weight=90
+    //% weight=97
     export function MotorRun(Channel:motorSEL, Direction:motorDIR, Speed:number): void {
         led.enable(false)
         let motorspeed = pins.map(Speed, 0, 100, 0, 1023)  
@@ -194,7 +243,7 @@ namespace NKP_BIT {
     */
     //% blockId="Motor_Turn" block="motor_turn direction %motorTurn | speed %Speed"
     //% Speed.min=0 Speed.max=100
-    //% weight=91
+    //% weight=96
     export function Motor_turn(Direction:motorTurn, Speed:number): void {
         led.enable(false)
         let motorspeed = pins.map(Speed, 0, 100, 0, 1023)
@@ -212,7 +261,7 @@ namespace NKP_BIT {
     */
     //% blockId="Motor_Turn" block="motor_spin direction %motorTurn | speed %Speed"
     //% Speed.min=0 Speed.max=100
-    //% weight=92
+    //% weight=95
     export function Motor_spin(Direction:motorTurn, Speed:number): void {
         led.enable(false)
         let motorspeed = pins.map(Speed, 0, 100, 0, 1023)
@@ -231,13 +280,25 @@ namespace NKP_BIT {
     }
 
     /**
+     * Execute puase time
+     * @param pausetime     mSec to delay; eg: 100
+    */
+     //% pausetime.min=1  pausetime.max=100000
+     //% blockId=Motor_TimePAUSE block="pause | %pausetime | mS"
+     //% color=#0033cc
+     //% weight=94
+     export function TimePAUSE(pausetime: number): void {
+        basic.pause(pausetime)
+     }
+
+    /**
      * Control Servo P0 to P12 degree 0 - 180 degree 
      * @param Degree   Servo degree 0-180, eg: 90
      */
 
     //% blockId="NKP_ServoRun" block="Servo %Servo|degree %Degree"
     //% Degree.min=0 Degree.max=180
-    //% weight=100
+    //% weight=93
     export function ServoRun(ServoSelect:Servo, Degree:number): void{
         led.enable(false)
         if(ServoSelect == Servo.Servo13){
@@ -255,15 +316,21 @@ namespace NKP_BIT {
         
     }
     
-/**
- * Execute puase time
- * @param pausetime     mSec to delay; eg: 100
-*/
- //% pausetime.min=1  pausetime.max=100000
- //% blockId=Motor_TimePAUSE block="pause | %pausetime | mS"
- //% color=#0033cc
- //% weight=30
- export function TimePAUSE(pausetime: number): void {
-    basic.pause(pausetime)
+    
+
+    /**
+     * TODO: describe your function here
+     * @param e describe parameter here
+     */
+    //% block
+    //% weight=92
+    export function Set_Line_Color(e: lineColor): void {
+        if (e == lineColor.Black) {
+            Color_Line = 0;
         }
+        else {
+            Color_Line = 1;
+        }
+        // Add code here
+    }
 }
