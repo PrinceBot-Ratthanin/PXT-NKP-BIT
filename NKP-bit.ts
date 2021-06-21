@@ -48,7 +48,7 @@ enum Servo {
  */
 //% weight=10 color=#ff9900 weight=10 icon="\uf11b"
 namespace NKP_BIT {
-	export enum analog_pin {
+	export enum analogPort {
         P0,
         P1,
         P2,
@@ -56,7 +56,7 @@ namespace NKP_BIT {
         P4,
         P10
     }
-	export enum digital_pin {
+	export enum digitalPort {
         P0,
         P1,
         P2,
@@ -76,21 +76,71 @@ namespace NKP_BIT {
 	P16
     }
 	/**
-     * TODO: AnalogRead
-     * @param e describe value here, eg: 0
+     * read analog sensor value from P0 -P4 and P10
+     * @param selectpin         select analog pin to read
+     * @return number           returns analog value from 0 to 1023
      */
-    //% block
-    export function analog(pin: analog_pin): number {
-        return pins.analogReadPin(AnalogPin.pin);
+    //% blockId=MySensor_analogRead
+    //% block="analog read |%selectpin|"
+    //% weight=80
+    export function analogRead(selectpin: analogPort): number {
+        switch (selectpin) {
+            case analogPort.P0:
+                return pins.analogReadPin(AnalogPin.P0);
+            case analogPort.P1:
+                return pins.analogReadPin(AnalogPin.P1);
+            case analogPort.P2:
+                return pins.analogReadPin(AnalogPin.P2);
+            case analogPort.P3:
+                return pins.analogReadPin(AnalogPin.P3);
+            case analogPort.P4:
+                return pins.analogReadPin(AnalogPin.P4);
+            case analogPort.P10:
+                return pins.analogReadPin(AnalogPin.P10);
+            default:
+                return 0;
+        }
     }
-	
-	/**
-     * TODO: digitalRead
-     * @param e describe value here, eg: 0
+
+    /**
+     * read Digital sensor value from P0-P12
+     * @param selectpins         select digital pin to read
+     * @return number           returns digital value  0 or 1
      */
-    //% block
-    export function DigitalRead(pin: digital_pin): number {
-        return pins.digitalReadPin(DigitalPin.pin);
+    //% blockId=MySensor_digitalRead
+    //% block="digital read |%selectpins|"
+    //% weight=79
+    export function digitalRead(selectpins:digitalPort): number {
+        switch (selectpins) {
+            case digitalPort.P0:
+                return pins.digitalReadPin(DigitalPin.P0);
+            case digitalPort.P1:
+                return pins.digitalReadPin(DigitalPin.P1);
+            case digitalPort.P2:
+                return pins.digitalReadPin(DigitalPin.P2);
+            case digitalPort.P3:
+                return pins.digitalReadPin(DigitalPin.P3);
+            case digitalPort.P4:
+                return pins.digitalReadPin(DigitalPin.P4);
+            case digitalPort.P5:
+                return pins.digitalReadPin(DigitalPin.P5);
+            case digitalPort.P6:
+                return pins.digitalReadPin(DigitalPin.P6);
+            case digitalPort.P7:
+                return pins.digitalReadPin(DigitalPin.P7);
+            case digitalPort.P8:
+                return pins.digitalReadPin(DigitalPin.P8);
+            case digitalPort.P9:
+                return pins.digitalReadPin(DigitalPin.P9);
+            case digitalPort.P10:
+                return pins.digitalReadPin(DigitalPin.P10);
+            case digitalPort.P11:
+                return pins.digitalReadPin(DigitalPin.P11);
+            case digitalPort.P12:
+                return pins.digitalReadPin(DigitalPin.P12);
+            default:
+                return 0;
+        }
     }
 	
 
