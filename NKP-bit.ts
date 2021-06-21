@@ -48,7 +48,7 @@ enum Servo {
  */
 //% weight=10 color=#ff9900 weight=10 icon="\uf11b"
 namespace NKP_BIT {
-	export enum AnalogPin {
+	export enum analog_pin {
         P0,
         P1,
         P2,
@@ -56,7 +56,7 @@ namespace NKP_BIT {
         P4,
         P10
     }
-	export enum DigitalPin {
+	export enum digital_pin {
         P0,
         P1,
         P2,
@@ -80,8 +80,8 @@ namespace NKP_BIT {
      * @param e describe value here, eg: 0
      */
     //% block
-    export function analog(e: AnalogPin): number {
-        return pins.analogReadPin(e);
+    export function analog(pin: analog_pin): number {
+        return pins.analogReadPin(AnalogPin.pin);
     }
 	
 	/**
@@ -89,8 +89,8 @@ namespace NKP_BIT {
      * @param e describe value here, eg: 0
      */
     //% block
-    export function DigitalRead(e: DigitalPin): number {
-        return pins.digitalReadPin(e);
+    export function DigitalRead(pin: digital_pin): number {
+        return pins.digitalReadPin(DigitalPin.pin);
     }
 	
 
