@@ -177,24 +177,24 @@ namespace NKP_BIT {
            pins.digitalWritePin(DigitalPin.P7, 1)  
         }
         else if (Channel == motorSEL.M12 && Direction == motorDIR.Forward) {
-           pins.analogWritePin(AnalogPin.P9, motorspeed)
-           pins.digitalWritePin(DigitalPin.P8, 1)
+           pins.analogWritePin(AnalogPin.P8, motorspeed)
+           pins.digitalWritePin(DigitalPin.P9, 1)
            pins.analogWritePin(AnalogPin.P7, motorspeed)
            pins.digitalWritePin(DigitalPin.P6, 1)
         }
         else if (Channel == motorSEL.M12 && Direction == motorDIR.Reverse) {
-           pins.analogWritePin(AnalogPin.P8, motorspeed)
-           pins.digitalWritePin(DigitalPin.P9, 1)
+           pins.analogWritePin(AnalogPin.P9, motorspeed)
+           pins.digitalWritePin(DigitalPin.P8, 1)
            pins.analogWritePin(AnalogPin.P6, motorspeed)
            pins.digitalWritePin(DigitalPin.P7, 1)       
         }
     }
-    /**MotorON          Control motor channel direction and speed.   
+    /**MotorTurn.   
     * @param Speed        Percent of motor speed, eg: 50
     */
-    //% blockId="Motor_Turn" block="direction %motorTurn | speed %Speed"
+    //% blockId="Motor_Turn" block="motor_turn direction %motorTurn | speed %Speed"
     //% Speed.min=0 Speed.max=100
-    //% weight=90
+    //% weight=91
     export function Motor_turn(Direction:motorTurn, Speed:number): void {
         led.enable(false)
         let motorspeed = pins.map(Speed, 0, 100, 0, 1023)
@@ -205,6 +205,28 @@ namespace NKP_BIT {
         else if(Direction == motorTurn.Right){
            pins.analogWritePin(AnalogPin.P8, motorspeed)
            pins.digitalWritePin(DigitalPin.P9, 1)
+        }
+    }
+    /**MotorSpin.   
+    * @param Speed        Percent of motor speed, eg: 50
+    */
+    //% blockId="Motor_Turn" block="motor_spin direction %motorTurn | speed %Speed"
+    //% Speed.min=0 Speed.max=100
+    //% weight=92
+    export function Motor_spin(Direction:motorTurn, Speed:number): void {
+        led.enable(false)
+        let motorspeed = pins.map(Speed, 0, 100, 0, 1023)
+        if (Direction == motorTurn.Left) {
+           pins.analogWritePin(AnalogPin.P9, motorspeed)
+           pins.digitalWritePin(DigitalPin.P8, 1)
+           pins.analogWritePin(AnalogPin.P7, motorspeed)
+           pins.digitalWritePin(DigitalPin.P6, 1)
+        }
+        else if(Direction == motorTurn.Right){
+           pins.analogWritePin(AnalogPin.P8, motorspeed)
+           pins.digitalWritePin(DigitalPin.P9, 1)
+           pins.analogWritePin(AnalogPin.P6, motorspeed)
+           pins.digitalWritePin(DigitalPin.P7, 1) 
         }
     }
 
