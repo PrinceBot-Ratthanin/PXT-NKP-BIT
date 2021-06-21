@@ -16,6 +16,12 @@ enum motorDIR {
     //% block="Reverse"
     Reverse
 }
+enum motorTurn {
+    //% block="Left"
+    Left,
+    //% block="Right"
+    Right
+}
 
 enum StopMode {
         //% block="brake"
@@ -31,15 +37,15 @@ enum Turn {
         Right
     }
 enum Servo {
-	
-	//% block="P13"
-	Servo13,
-	//% block="P14"
-	Servo14,
-	//% block="P15"
-	Servo15,
-	//% block="P16"
-	Servo16
+    
+    //% block="P13"
+    Servo13,
+    //% block="P14"
+    Servo14,
+    //% block="P15"
+    Servo15,
+    //% block="P16"
+    Servo16
     }
 
    
@@ -48,7 +54,7 @@ enum Servo {
  */
 //% weight=10 color=#ff9900 weight=10 icon="\uf11b"
 namespace NKP_BIT {
-	export enum analogPort {
+    export enum analogPort {
         P0,
         P1,
         P2,
@@ -56,26 +62,26 @@ namespace NKP_BIT {
         P4,
         P10
     }
-	export enum digitalPort {
-        P0,
-        P1,
-        P2,
-        P3,
-        P4,
-	P5,
-	P6,
-	P7,
-	P8,
-	P9,
-        P10,
-	P11,
-	P12,
-	P13,
-	P14,
-	P15,
-	P16
+    export enum digitalPort {
+    P0,
+    P1,
+    P2,
+    P3,
+    P4,
+    P5,
+    P6,
+    P7,
+    P8,
+    P9,
+    P10,
+    P11,
+    P12,
+    P13,
+    P14,
+    P15,
+    P16
     }
-	/**
+    /**
      * read analog sensor value from P0 -P4 and P10
      * @param selectpin         select analog pin to read
      * @return number           returns analog value from 0 to 1023
@@ -142,28 +148,29 @@ namespace NKP_BIT {
                 return 0;
         }
     }
-	
+    
 
     /**MotorON          Control motor channel direction and speed.   
-    * @param Speed  	  Percent of motor speed, eg: 50
+    * @param Speed        Percent of motor speed, eg: 50
     */
     //% blockId="Motor_MotorRun" block="motor %motorSEL | direction %motorDIR | speed %Speed"
     //% Speed.min=0 Speed.max=100
     //% weight=90
     export function MotorRun(Channel:motorSEL, Direction:motorDIR, Speed:number): void {
+        led.enable(false)
         let motorspeed = pins.map(Speed, 0, 100, 0, 1023)  
         
         if (Channel == motorSEL.M1 && Direction == motorDIR.Forward) {
+           pins.analogWritePin(AnalogPin.P8, motorspeed)
+           pins.digitalWritePin(DigitalPin.P9, 1)
+        }
+     else if (Channel == motorSEL.M1 && Direction == motorDIR.Reverse) {
            pins.analogWritePin(AnalogPin.P9, motorspeed)
            pins.digitalWritePin(DigitalPin.P8, 1)
         }
         else if (Channel == motorSEL.M2 && Direction == motorDIR.Forward) {
            pins.analogWritePin(AnalogPin.P7, motorspeed)
            pins.digitalWritePin(DigitalPin.P6, 1)
-        }
-        else if (Channel == motorSEL.M1 && Direction == motorDIR.Reverse) {
-           pins.analogWritePin(AnalogPin.P8, motorspeed)
-           pins.digitalWritePin(DigitalPin.P9, 1)
         }
         else if (Channel == motorSEL.M2 && Direction == motorDIR.Reverse) {
            pins.analogWritePin(AnalogPin.P6, motorspeed)
@@ -179,10 +186,29 @@ namespace NKP_BIT {
            pins.analogWritePin(AnalogPin.P8, motorspeed)
            pins.digitalWritePin(DigitalPin.P9, 1)
            pins.analogWritePin(AnalogPin.P6, motorspeed)
-           pins.digitalWritePin(DigitalPin.P7, 1)  		
+           pins.digitalWritePin(DigitalPin.P7, 1)       
         }
     }
-	/**
+    /**MotorON          Control motor channel direction and speed.   
+    * @param Speed        Percent of motor speed, eg: 50
+    */
+    //% blockId="Motor_Turn" block="direction %motorTurn | speed %Speed"
+    //% Speed.min=0 Speed.max=100
+    //% weight=90
+    export function Motor_turn(Direction:motorTurn, Speed:number): void {
+        led.enable(false)
+        let motorspeed = pins.map(Speed, 0, 100, 0, 1023)
+        if (Direction == motorTurn.Left) {
+           pins.analogWritePin(AnalogPin.P7, motorspeed)
+           pins.digitalWritePin(DigitalPin.P6, 1)
+        }
+        else if(Direction == motorTurn.Right){
+           pins.analogWritePin(AnalogPin.P8, motorspeed)
+           pins.digitalWritePin(DigitalPin.P9, 1)
+        }
+    }
+
+    /**
      * Control Servo P0 to P12 degree 0 - 180 degree 
      * @param Degree   Servo degree 0-180, eg: 90
      */
@@ -191,13 +217,14 @@ namespace NKP_BIT {
     //% Degree.min=0 Degree.max=180
     //% weight=100
     export function ServoRun(ServoSelect:Servo, Degree:number): void{
+        led.enable(false)
         if(ServoSelect == Servo.Servo13){
             pins.servoWritePin(AnalogPin.P13, Degree)
         }
         if(ServoSelect == Servo.Servo14){
             pins.servoWritePin(AnalogPin.P14, Degree)
         }
-	if(ServoSelect == Servo.Servo15){
+    if(ServoSelect == Servo.Servo15){
             pins.servoWritePin(AnalogPin.P15, Degree)
         }
         if(ServoSelect == Servo.Servo16){
@@ -205,16 +232,16 @@ namespace NKP_BIT {
         }
         
     }
-	
+    
 /**
  * Execute puase time
- * @param pausetime  	mSec to delay; eg: 100
+ * @param pausetime     mSec to delay; eg: 100
 */
  //% pausetime.min=1  pausetime.max=100000
  //% blockId=Motor_TimePAUSE block="pause | %pausetime | mS"
  //% color=#0033cc
  //% weight=30
  export function TimePAUSE(pausetime: number): void {
-	basic.pause(pausetime)
+    basic.pause(pausetime)
         }
 }
