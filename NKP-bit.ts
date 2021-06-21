@@ -403,11 +403,11 @@ namespace NKP_BIT {
 
         if (Color_Line == 0) {
             for (let numSen = 0; numSen < Num_Sensor; numSen++) {
-                let value = Math.map(SensorRead[numSen], minValue[numSen], maxValue[numSen], 1000, 0);
-                if (value > 200) {
+                let value = Math.map(SensorRead[numSen], minValue[numSen], maxValue[numSen], 100, 0);
+                if (value > 20) {
                     ON_Line = 1;
                 }
-                if (value > 0) {
+                if (value > 5) {
                     avg += value * (numSen * 100);
                     sum += value;
                 }
@@ -415,7 +415,7 @@ namespace NKP_BIT {
         }
         else {
             for (let numSen = 0; numSen < Num_Sensor; numSen++) {
-                let value = Math.map(SensorRead[numSen], minValue[numSen], maxValue[numSen], 0, 1000);
+                let value = Math.map(SensorRead[numSen], minValue[numSen], maxValue[numSen], 0, 100);
                 if (value > 200) {
                     ON_Line = 1;
                 }
@@ -444,8 +444,8 @@ namespace NKP_BIT {
      */
     //% blockId=PID block=" PID Function KP%kp|KI%ki|KD%kd|position%datain|"
     export function PID(kp: number,kd: number, datain: number): number {
-        let setpoint = 0;
-        let errors = setpoint - datain;
+        let setpoint = (Num_Sensor-1)/2;
+        let errors = setpoint - NKP_BIT.Read_Position;
         integral = integral + errors;
         derivative = (errors - previous_error);
         previous_error = errors;
