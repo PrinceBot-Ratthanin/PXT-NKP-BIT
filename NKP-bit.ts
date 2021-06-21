@@ -259,7 +259,7 @@ namespace NKP_BIT {
     /**MotorSpin.   
     * @param Speed        Percent of motor speed, eg: 50
     */
-    //% blockId="Motor_Turn" block="motor_spin direction %motorTurn | speed %Speed"
+    //% blockId="Motor_spin" block="motor_spin direction %motorTurn | speed %Speed"
     //% Speed.min=0 Speed.max=100
     //% weight=95
     export function Motor_spin(Direction:motorTurn, Speed:number): void {
@@ -332,5 +332,123 @@ namespace NKP_BIT {
             Color_Line = 1;
         }
         // Add code here
+    }
+    /**
+  * Set_Min_Value
+  * @param min1 Value of Sensor; eg: 0
+  * 
+  */
+    //% blockId=Set_Min_Value block="Set_Min_Value %min1|"
+    //% weight=80
+    export function Set_Min_Value(min1: number[]): void {
+        Num_Sensor = min1.length;
+        for (let NumOfSensor = 0; NumOfSensor < min1.length; NumOfSensor++) {
+            minValue[NumOfSensor] = min1[NumOfSensor];
+        }
+        // Add code here
+    }
+
+    /**
+  * Set_Max_Value
+  * @param max1 Value of Sensor; eg: 0
+  * 
+  */
+    //% blockId=Set_Max_Value block="Set_Max_Value %max1|"
+    //% weight=80
+    export function Set_Max_Value(max1: number[]): void {
+        Num_Sensor = max1.length;
+        for (let NumOfSensor = 0; NumOfSensor < max1.length; NumOfSensor++) {
+            maxValue[NumOfSensor] = max1[NumOfSensor];
+        }
+        // Add code here
+    }
+
+
+
+    /**
+     * TODO: describe your function here
+     * @param value describe value here, eg: 0
+     */
+    //% block
+    export function ReadMin(value: number): number {
+        return minValue[value];
+    }
+    /**
+     * TODO: describe your function here
+     * @param value describe value here, eg: 0
+     */
+    //% block
+    export function ReadMax(value: number): number {
+        return maxValue[value];
+    }
+
+    /**
+     * TODO: describe your function here
+     * @param e describe value here, eg: 0
+     */
+    //% block
+    export function analog(e: AnalogPin): number {
+        return pins.analogReadPin(e);
+    }
+
+    /**
+     * TODO: Read_Position
+     * @param SensorRead Value of Sensor; eg: 0
+     */
+    //% blockId=Read_Position block="Read_Position %SensorRead|"
+    export function Read_Position(SensorRead: number[]): number {
+        let ON_Line = 0;
+        let avg = 0;
+        let sum = 0;
+
+        if (Color_Line == 0) {
+            for (let numSen = 0; numSen < Num_Sensor; numSen++) {
+                let value = Math.map(SensorRead[numSen], minValue[numSen], maxValue[numSen], 1000, 0);
+                if (value > 200) {
+                    ON_Line = 1;
+                }
+                if (value > 0) {
+                    avg += value * (numSen * 100);
+                    sum += value;
+                }
+            }
+        }
+        else {
+            for (let numSen = 0; numSen < Num_Sensor; numSen++) {
+                let value = Math.map(SensorRead[numSen], minValue[numSen], maxValue[numSen], 0, 1000);
+                if (value > 200) {
+                    ON_Line = 1;
+                }
+                if (value > 0) {
+                    avg += value * (numSen * 100);
+                    sum += value;
+                }
+            }
+        }
+        if (ON_Line == 0) {
+            if (_lastPosition < (Num_Sensor - 1) * 100 / 2) {
+                return 0;
+            }
+            else {
+                return (Num_Sensor - 1) * 100;
+            }
+        }
+        _lastPosition = avg / sum;
+        return (_lastPosition);
+    }
+
+    /**
+     * @param Kp Value of Sensor; eg: 1
+     * @param Kd Value of Sensor; eg: 0
+     * @param datain Value of Sensor; eg: 0
+     */
+    //% blockId=PID block=" PID Function KP%kp|KI%ki|KD%kd|position%datain|"
+    export function PID(kp: number,kd: number, datain: number): number {
+        let setpoint = 0;
+        let errors = setpoint - datain;
+        integral = integral + errors;
+        derivative = (errors - previous_error);
+        previous_error = errors;
+        return kp * errors + kd * derivative;
     }
 }
