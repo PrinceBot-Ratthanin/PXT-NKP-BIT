@@ -198,6 +198,8 @@ namespace NKP_BIT {
            pins.digitalWritePin(DigitalPin.P7, 1)       
         }
     }
+
+
     /**MotorTurn.   
     * @param Speed        Percent of motor speed, eg: 50
     */
@@ -216,6 +218,7 @@ namespace NKP_BIT {
            pins.digitalWritePin(DigitalPin.P9, 1)
         }
     }
+
     /**MotorSpin.   
     * @param Speed        Percent of motor speed, eg: 50
     */
@@ -236,6 +239,23 @@ namespace NKP_BIT {
            pins.digitalWritePin(DigitalPin.P9, 1)
            pins.analogWritePin(AnalogPin.P6, motorspeed)
            pins.digitalWritePin(DigitalPin.P7, 1) 
+        }
+    }
+
+    /**MotorStop.   
+    * 
+    */
+    //% blockId="Motor_Stop" block="motor Stop %motorSEL"
+    //% weight=96
+    export function Motor_Stop(Channel:motorSEL): void {
+        led.enable(false)
+        if(Channel == motorSEL.M1){
+            pins.digitalWritePin(DigitalPin.P8, 0)
+            pins.digitalWritePin(DigitalPin.P9, 0)
+        }
+        else if(Channel == motorSEL.M2){
+            pins.digitalWritePin(DigitalPin.P6, 0)
+            pins.digitalWritePin(DigitalPin.P7, 0)
         }
     }
 
@@ -389,12 +409,12 @@ namespace NKP_BIT {
     }
     export function Motor(_ch:number ,_Speed : number): void{
         if(_ch == 1){
-            if(_Speed >= 0){MotorRun(1,1,_Speed);}
-            else{MotorRun(1,2,Math.abs(_Speed));}
+            if(_Speed >= 0){NKP_BIT.MotorRun(motorSEL.M1, motorDIR.Forward, _Speed);}
+            else{NKP_BIT.MotorRun(motorSEL.M1, motorDIR.Reverse,Math.abs(_Speed));}
         }
         else if(_ch == 2){
-            if(_Speed >= 0){MotorRun(2,1,_Speed);}
-            else{MotorRun(2,2,Math.abs(_Speed));}
+            if(_Speed >= 0){NKP_BIT.MotorRun(motorSEL.M2, motorDIR.Forward, _Speed);}
+            else{NKP_BIT.MotorRun(motorSEL.M2, motorDIR.Reverse,Math.abs(_Speed));}
         }
     }
     /**
