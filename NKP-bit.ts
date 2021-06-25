@@ -167,7 +167,9 @@ namespace NKP_BIT {
     //% weight=97
     export function MotorRun(Channel:motorSEL, Direction:motorDIR, Speed:number): void {
         led.enable(false)
-        let motorspeed = pins.map(Speed, 0, 100, 0, 1023)  
+        if(Speed < 0){Speed = 0;}
+        else if(Speed > 100){Speed =100;}
+        let motorspeed = pins.map(Speed, 0, 100, 1023, 0)  
         
         if (Channel == motorSEL.M1 && Direction == motorDIR.Forward) {
            pins.analogWritePin(AnalogPin.P8, motorspeed)
