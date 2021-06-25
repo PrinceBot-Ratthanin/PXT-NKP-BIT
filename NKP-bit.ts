@@ -395,7 +395,7 @@ namespace NKP_BIT {
      * @param datain Value of Sensor; eg: 0
      */
     //% blockId=PID block=" PID Function speed%_Speed|KP%kp|KD%kd|Pin%SensorRead|"
-    export function PID(_Speed : number,kp: number,kd: number,SensorRead ,number[]): number {
+    export function PID(_Speed : number,kp: number,kd: number,SensorRead:number[]): number {
         let setpoint = ((Num_Sensor-1)/2) * 100;
         let errors = setpoint - NKP_BIT.Read_Position(SensorRead);
         integral = integral + errors;
