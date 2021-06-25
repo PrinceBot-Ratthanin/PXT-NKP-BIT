@@ -124,17 +124,17 @@ namespace NKP_BIT {
     export function digitalRead(selectpins:digitalPort): number {
         switch (selectpins) {
             case digitalPort.P0:
-                if(pins.digitalReadPin(DigitalPin.P0) > 511 ){return 1;}else{return 0;}
+                if(pins.analogReadPin(AnalogPin.P0) > 511 ){return 1;}else{return 0;}
             case digitalPort.P1:
-                if(pins.digitalReadPin(DigitalPin.P1) > 511 ){return 1;}else{return 0;}
+                if(pins.analogReadPin(AnalogPin.P1) > 511 ){return 1;}else{return 0;}
             case digitalPort.P2:
-                if(pins.digitalReadPin(DigitalPin.P2) > 511 ){return 1;}else{return 0;}
+                if(pins.analogReadPin(AnalogPin.P2) > 511 ){return 1;}else{return 0;}
             case digitalPort.P3:
-                if(pins.digitalReadPin(DigitalPin.P3) > 511 ){return 1;}else{return 0;}
+                if(pins.analogReadPin(AnalogPin.P3) > 511 ){return 1;}else{return 0;}
             case digitalPort.P4:
-                if(pins.digitalReadPin(DigitalPin.P4) > 511 ){return 1;}else{return 0;}
+                if(pins.analogReadPin(AnalogPin.P4) > 511 ){return 1;}else{return 0;}
             case digitalPort.P10:
-                if(pins.digitalReadPin(DigitalPin.P10) > 511 ){return 1;}else{return 0;}
+                if(pins.analogReadPin(AnalogPin.P10) > 511 ){return 1;}else{return 0;}
         }
     }
     /**
@@ -276,8 +276,6 @@ namespace NKP_BIT {
         
     }
     
-    
-
     /**
      * TODO: describe your function here
      * @param e describe parameter here
@@ -293,6 +291,7 @@ namespace NKP_BIT {
         }
         // Add code here
     }
+
     /**
   * Set_Min_Value
   * @param min1 Value of Sensor; eg: 0
@@ -388,19 +387,35 @@ namespace NKP_BIT {
         _lastPosition = avg / sum;
         return (_lastPosition);
     }
-
+    export function Motor(_ch:number ,_Speed : number): void{
+        if(_ch == 1){
+            if(_Speed >= 0){MotorRun(1,1,_Speed);}
+            else{MotorRun(1,2,Math.abs(_Speed));}
+        }
+        else if(_ch == 2){
+            if(_Speed >= 0){MotorRun(2,1,_Speed);}
+            else{MotorRun(2,2,Math.abs(_Speed));}
+        }
+    }
     /**
      * @param Kp Value of Sensor; eg: 1
      * @param Kd Value of Sensor; eg: 0
-     * @param datain Value of Sensor; eg: 0
+     * @param _Speed Value of Sensor; eg: 50
      */
     //% blockId=PID block=" PID Function speed%_Speed|KP%kp|KD%kd|Pin%SensorRead|"
-    export function PID(_Speed : number,kp: number,kd: number,SensorRead:number[]): number {
+    export function PID(_Speed : number,kp: number,kd: number,SensorRead:number[]): void {
         let setpoint = ((Num_Sensor-1)/2) * 100;
         let errors = setpoint - NKP_BIT.Read_Position(SensorRead);
         integral = integral + errors;
         derivative = (errors - previous_error);
+        let output = kp * errors + kd * derivative;
+        let speed_motor = _Speed;
+        if(output > 100 ){output = 100;}
+        else if(output <-100){output = -100;}
+        Motor(1,speed_motor - output);
+        Motor(2,speed_motor + output);
         previous_error = errors;
-        return kp * errors + kd * derivative;
+        
+        //return kp * errors + kd * derivative;
     }
 }
