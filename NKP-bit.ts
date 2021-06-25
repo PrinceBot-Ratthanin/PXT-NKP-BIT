@@ -84,18 +84,7 @@ namespace NKP_BIT {
         P2,
         P3,
         P4,
-        P5,
-        P6,
-        P7,
-        P8,
-        P9,
-        P10,
-        P11,
-        P12,
-        P13,
-        P14,
-        P15,
-        P16
+        P10
     }
     /**
      * read analog sensor value from P0 -P4 and P10
@@ -135,33 +124,17 @@ namespace NKP_BIT {
     export function digitalRead(selectpins:digitalPort): number {
         switch (selectpins) {
             case digitalPort.P0:
-                return pins.digitalReadPin(DigitalPin.P0);
+                if(pins.digitalReadPin(DigitalPin.P0) > 511 ){return 1;}else{return 0;}
             case digitalPort.P1:
-                return pins.digitalReadPin(DigitalPin.P1);
+                if(pins.digitalReadPin(DigitalPin.P1) > 511 ){return 1;}else{return 0;}
             case digitalPort.P2:
-                return pins.digitalReadPin(DigitalPin.P2);
+                if(pins.digitalReadPin(DigitalPin.P2) > 511 ){return 1;}else{return 0;}
             case digitalPort.P3:
-                return pins.digitalReadPin(DigitalPin.P3);
+                if(pins.digitalReadPin(DigitalPin.P3) > 511 ){return 1;}else{return 0;}
             case digitalPort.P4:
-                return pins.digitalReadPin(DigitalPin.P4);
-            case digitalPort.P5:
-                return pins.digitalReadPin(DigitalPin.P5);
-            case digitalPort.P6:
-                return pins.digitalReadPin(DigitalPin.P6);
-            case digitalPort.P7:
-                return pins.digitalReadPin(DigitalPin.P7);
-            case digitalPort.P8:
-                return pins.digitalReadPin(DigitalPin.P8);
-            case digitalPort.P9:
-                return pins.digitalReadPin(DigitalPin.P9);
+                if(pins.digitalReadPin(DigitalPin.P4) > 511 ){return 1;}else{return 0;}
             case digitalPort.P10:
-                return pins.digitalReadPin(DigitalPin.P10);
-            case digitalPort.P11:
-                return pins.digitalReadPin(DigitalPin.P11);
-            case digitalPort.P12:
-                return pins.digitalReadPin(DigitalPin.P12);
-            default:
-                return 0;
+                if(pins.digitalReadPin(DigitalPin.P10) > 511 ){return 1;}else{return 0;}
         }
     }
     /**
@@ -180,20 +153,7 @@ namespace NKP_BIT {
                 pins.digitalWritePin(DigitalPin.P1,Status);
             case digitalPort.P2:
                 pins.digitalWritePin(DigitalPin.P2,Status);
-            case digitalPort.P3:
-                pins.digitalWritePin(DigitalPin.P3,Status);
-            case digitalPort.P4:
-                pins.digitalWritePin(DigitalPin.P4,Status);
-            case digitalPort.P10:
-                pins.digitalWritePin(DigitalPin.P10,Status);
-            case digitalPort.P13:
-                pins.digitalWritePin(DigitalPin.P13,Status);
-            case digitalPort.P14:
-                pins.digitalWritePin(DigitalPin.P14,Status);
-            case digitalPort.P15:
-                pins.digitalWritePin(DigitalPin.P15,Status);
-            case digitalPort.P16:
-                pins.digitalWritePin(DigitalPin.P16,Status);
+            
         }
         // body...
     }
@@ -382,14 +342,6 @@ namespace NKP_BIT {
         return maxValue[value];
     }
 
-    /**
-     * TODO: describe your function here
-     * @param e describe value here, eg: 0
-     */
-    //% block
-    export function analog(e: AnalogPin): number {
-        return pins.analogReadPin(e);
-    }
 
     /**
      * TODO: Read_Position
@@ -419,7 +371,7 @@ namespace NKP_BIT {
                 if (value > 200) {
                     ON_Line = 1;
                 }
-                if (value > 0) {
+                if (value > 5) {
                     avg += value * (numSen * 100);
                     sum += value;
                 }
@@ -442,10 +394,10 @@ namespace NKP_BIT {
      * @param Kd Value of Sensor; eg: 0
      * @param datain Value of Sensor; eg: 0
      */
-    //% blockId=PID block=" PID Function KP%kp|KI%ki|KD%kd|position%datain|"
-    export function PID(kp: number,kd: number, datain: number): number {
-        let setpoint = (Num_Sensor-1)/2;
-        let errors = setpoint - NKP_BIT.Read_Position;
+    //% blockId=PID block=" PID Function speed%_Speed|KP%kp|KD%kd|Pin%SensorRead|"
+    export function PID(_Speed : number,kp: number,kd: number,SensorRead ,number[]): number {
+        let setpoint = ((Num_Sensor-1)/2) * 100;
+        let errors = setpoint - NKP_BIT.Read_Position(SensorRead);
         integral = integral + errors;
         derivative = (errors - previous_error);
         previous_error = errors;
