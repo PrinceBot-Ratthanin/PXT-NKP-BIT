@@ -257,6 +257,22 @@ namespace NKP_BIT {
             pins.digitalWritePin(DigitalPin.P6, 0)
             pins.digitalWritePin(DigitalPin.P7, 0)
         }
+        else if(Channel == motorSEL.M12){
+            pins.digitalWritePin(DigitalPin.P6, 0)
+            pins.digitalWritePin(DigitalPin.P7, 0)
+            pins.digitalWritePin(DigitalPin.P8, 0)
+            pins.digitalWritePin(DigitalPin.P9, 0)
+        }
+    }
+    export function Motor(_ch:number ,_Speed : number): void{
+        if(_ch == 1){
+            if(_Speed >= 0){NKP_BIT.MotorRun(motorSEL.M1, motorDIR.Forward, _Speed);}
+            else{NKP_BIT.MotorRun(motorSEL.M1, motorDIR.Reverse,Math.abs(_Speed));}
+        }
+        else if(_ch == 2){
+            if(_Speed >= 0){NKP_BIT.MotorRun(motorSEL.M2, motorDIR.Forward, _Speed);}
+            else{NKP_BIT.MotorRun(motorSEL.M2, motorDIR.Reverse,Math.abs(_Speed));}
+        }
     }
 
     /**
@@ -407,16 +423,7 @@ namespace NKP_BIT {
         _lastPosition = avg / sum;
         return (_lastPosition);
     }
-    export function Motor(_ch:number ,_Speed : number): void{
-        if(_ch == 1){
-            if(_Speed >= 0){NKP_BIT.MotorRun(motorSEL.M1, motorDIR.Forward, _Speed);}
-            else{NKP_BIT.MotorRun(motorSEL.M1, motorDIR.Reverse,Math.abs(_Speed));}
-        }
-        else if(_ch == 2){
-            if(_Speed >= 0){NKP_BIT.MotorRun(motorSEL.M2, motorDIR.Forward, _Speed);}
-            else{NKP_BIT.MotorRun(motorSEL.M2, motorDIR.Reverse,Math.abs(_Speed));}
-        }
-    }
+    
     /**
      * @param Kp Value of Sensor; eg: 1
      * @param Kd Value of Sensor; eg: 0
@@ -424,6 +431,7 @@ namespace NKP_BIT {
      */
     //% blockId=PID block=" PID Function speed%_Speed|KP%kp|KD%kd|Pin%SensorRead|"
     export function PID(_Speed : number,kp: number,kd: number,SensorRead:number[]): void {
+        Num_Sensor = SensorRead.length;
         let setpoint = ((Num_Sensor-1)/2) * 100;
         let errors = setpoint - NKP_BIT.Read_Position(SensorRead);
         integral = integral + errors;
